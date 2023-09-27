@@ -1,0 +1,26 @@
+From abb92e003629176106d89c23ae9f04fbeb025bdb Mon Sep 17 00:00:00 2001
+From: Kyle Cesare <kcesare@gmail.com>
+Date: Wed, 27 Sep 2023 10:18:08 -0600
+Subject: [PATCH] Don't override library output directory.
+
+---
+ CMakeLists.txt | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ca4ca57e..1782d2dc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -24,9 +24,6 @@ include(FeatureSummary)
+ include(CompilerSettings)
+ include(OMPLUtils)
+ 
+-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
+-
+ set(OMPL_CMAKE_UTIL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules"
+     CACHE FILEPATH "Path to directory with auxiliary CMake scripts for OMPL")
+ set(OMPL_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src;${CMAKE_CURRENT_BINARY_DIR}/src")
+-- 
+2.40.1
+

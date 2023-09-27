@@ -12,10 +12,8 @@ RUN yum -y install \
     && yum -y clean all \
     && rm -rf /var/cache
 
-# Install PyPy to speed up the OMPL code generation step.
-RUN curl https://downloads.python.org/pypy/pypy3.10-v7.3.12-linux64.tar.bz2 > pypy.tar.bz2 \
-    && tar xfj pypy.tar.bz2 \
-    && ln -s "$(pwd)/pypy3.10-v7.3.12-linux64/bin/pypy" /usr/bin/
+# Put the built-in PyPy in a place that OMPL will recognize it.
+RUN ln -s /opt/python/pp310-pypy310_pp73/bin/pypy /usr/bin
 
 # Install CastXML dependency.
 RUN git clone --depth 1 https://github.com/CastXML/CastXML /work/CastXML

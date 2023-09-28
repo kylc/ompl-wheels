@@ -35,3 +35,36 @@ jobs:
         with:
           name: wheels
           path: wheelhouse
+
+  pre-release:
+    name: Pre Release
+    concurrency:
+      group: push-${{ github.ref_name }}-prerelease
+      cancel-in-progress: true
+    needs: [build_wheels]
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: dev-drprasad/delete-tag-and-release@v0.2.1
+        with:
+          tag_name: prerelease
+          delete_release: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: wheels
+          path: wheelhouse
+
+      # Create the actual prerelease
+      # https://github.com/ncipollo/release-action
+      - name: GitHub Release
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          prerelease: true
+          tag: "prerelease"
+          name: "Development Build"
+          allowUpdates: true
+          removeArtifacts: true
+          replacesArtifacts: true
+          artifacts: "wheelhouse/*"

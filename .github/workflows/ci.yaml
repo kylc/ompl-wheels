@@ -1,0 +1,37 @@
+name: Build
+on: push
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}-${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, macos-13]
+        arch: [x86_64]
+        include:
+          - os: macos-13
+            arch: arm64
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.16.1
+        env:
+          # Linux
+          CIBW_MANYLINUX_X86_64_IMAGE: "quay.io/pypa/manylinux_2_28_x86_64"
+          CIBW_ENVIRONMENT_LINUX: OMPL_BUILD_TARGET="linux" OMPL_BUILD_ARCH="${{ matrix.arch }}"
+          # OS X
+          CIBW_ENVIRONMENT_MACOS: OMPL_BUILD_TARGET="macos" OMPL_BUILD_ARCH="${{ matrix.arch }}"
+          CIBW_ARCHS_MACOS: ${{ matrix.arch }}
+            # All systems
+          CIBW_BEFORE_ALL: ./install_deps.sh
+          CIBW_BEFORE_BUILD: ./before_build.sh
+          CIBW_BUILD: cp310-macosx_x86_64 cp310-macosx_arm64 cp310-manylinux_x86_64
+      - uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: wheelhouse

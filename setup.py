@@ -105,6 +105,10 @@ class CMakeBuild(build_ext):
                 build_args += ["--config", cfg]
 
         if sys.platform.startswith("darwin"):
+            # TODO: Move these out to configuration
+            cmake_args += ["-DCMAKE_CXX_COMPILER=/usr/local/opt/llvm@16/bin/clang++"]
+            cmake_args += ["-DCMAKE_OSX_DEPLOYMENT_TARGET=12.7"]
+
             # Cross-compile support for macOS - respect ARCHFLAGS if set
             archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))
             if archs:
@@ -150,7 +154,7 @@ setup(
     author="Ioan A. Șucan, Mark Moll, Zachary Kingston, Lydia E. Kavraki",
     author_email="zak@rice.edu",
     url="https://ompl.kavrakilab.org",
-    ext_modules=[CMakeExtension("ompl", sourcedir=".")],
+    ext_modules=[CMakeExtension("ompl", sourcedir="ompl")],
     cmdclass={"build_ext": CMakeBuild},
     packages=[
         "ompl",
@@ -160,5 +164,5 @@ setup(
         "ompl.tools",
         "ompl.util",
     ],
-    package_dir={"ompl": "py-bindings/ompl"},
+    package_dir={"ompl": "ompl/py-bindings/ompl"},
 )

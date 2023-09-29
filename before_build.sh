@@ -5,6 +5,7 @@ set -eux
 build_target="${OMPL_BUILD_TARGET:-linux}"
 build_arch="${OMPL_BUILD_ARCH:-x86_64}"
 python_version=$(python3 -c 'import sys; v=sys.version_info; print(f"{v.major}.{v.minor}")')
+python_include_path=$(python3 -c "from sysconfig import get_paths as gp; print(gp()['include'])")
 boost_version="1.82.0"
 
 # Need latest for this PR with Mac fixes:
@@ -41,6 +42,7 @@ if [ "${build_target}" == "linux" ]; then
             --with-program_options \
             --with-python \
             install
+
         popd
     fi
 
@@ -53,10 +55,6 @@ if [ "${build_target}" == "macos" ]; then
     # Install the latest Boost, because it has to be linked to the exact version of
     # Python for which we are building the wheel.
     if [ ! -d "boost_1_82_0" ]; then
-        # TODO: Get this from Python
-        python_include_path="/Library/Frameworks/Python.framework/Versions/3.10/include/python3.10"
-        ls -l ${python_include_path}
-
         curl -L "https://boostorg.jfrog.io/artifactory/main/release/${boost_version}/source/boost_${boost_version//./_}.tar.bz2" | tar xj
         echo "using python : ${python_version} : : ${python_include_path} ;" >$HOME/user-config.jam
         pushd "boost_${boost_version//./_}"

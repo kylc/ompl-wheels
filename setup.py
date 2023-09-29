@@ -107,7 +107,7 @@ class CMakeBuild(build_ext):
         if sys.platform.startswith("darwin"):
             # TODO: Move these out to configuration
             cmake_args += ["-DCMAKE_CXX_COMPILER=/usr/local/opt/llvm@16/bin/clang++"]
-            cmake_args += ["-DCMAKE_OSX_DEPLOYMENT_TARGET=12.7"]
+            cmake_args += ["-DCMAKE_OSX_DEPLOYMENT_TARGET=13.0"]
 
             # Cross-compile support for macOS - respect ARCHFLAGS if set
             archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))

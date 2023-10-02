@@ -8,8 +8,8 @@ python_version=$(python3 -c 'import sys; v=sys.version_info; print(f"{v.major}.{
 python_include_path=$(python3 -c "from sysconfig import get_paths as gp; print(gp()['include'])")
 boost_version="1.82.0"
 
-# Clean up if we have leftover build artifacts.
-rm -rf CastXML "boost_${boost_version//./_}" || true
+# Work inside a temporary directory.
+cd $(mktemp -d -t "ompl-wheels.XXX")
 
 # Need latest for this PR with Mac fixes:
 # https://github.com/ompl/pyplusplus/pull/1

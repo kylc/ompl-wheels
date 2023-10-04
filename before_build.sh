@@ -46,7 +46,7 @@ fi
 
 if [ "${build_target}" == "macos" ]; then
     # For Python development headers
-    brew install "python@${python_version}"
+    brew install --overwrite "python@${python_version}"
 
     # Install the latest Boost, because it has to be linked to the exact version of
     # Python for which we are building the wheel.

@@ -4,7 +4,6 @@ build_target="${OMPL_BUILD_TARGET:-linux}"
 build_arch="${OMPL_BUILD_ARCH:-x86_64}"
 
 if [ "${build_target}" == "linux" ]; then
-    yum update
     yum -y install \
         eigen3 \
         ninja-build \

@@ -14,6 +14,12 @@ if [ "${build_target}" == "linux" ]; then
 fi
 
 if [ "${build_target}" == "macos" ]; then
-    brew update
+    export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+    export HOMEBREW_NO_AUTO_UPDATE=1
+
+    # Overwrite whatever Python binaries are shipped in our CI image.
+    # see: https://github.com/orgs/Homebrew/discussions/3895
+    brew install --force --overwrite python@3.10
+
     brew install eigen ninja pypy3 castxml llvm@16
 fi

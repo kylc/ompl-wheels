@@ -38,6 +38,7 @@ jobs:
           path: wheelhouse
 
   pre-release:
+    if: github.ref == 'refs/heads/master'
     name: Pre Release
     concurrency:
       group: push-${{ github.ref_name }}-prerelease
